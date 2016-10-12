@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import AppContainer from './containers/AppContainer';
 import {Provider} from 'react-redux';
 
+import AlbumListContainer from './containers/AlbumListContainer'
 import store from './store';
 
 

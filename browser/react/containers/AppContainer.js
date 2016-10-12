@@ -47,7 +47,7 @@ export default class AppContainer extends Component {
 		fetch('/api/albums/1')
 			.then(res => res.json())
 			.then(album => this.onLoad(convertAlbum(album)));
-		
+
 		AUDIO.addEventListener('ended', () => 
 			this.next());
 		AUDIO.addEventListener('timeupdate', () => 
@@ -114,19 +114,17 @@ export default class AppContainer extends Component {
 				<div className="col-xs-2">
 					<Sidebar />
 				</div>
-				<div>
-					<AlbumListContainer 
-						albumList={this.state.albumList}
-					/>
-				</div>
 				<div className="col-xs-10">
+					<AlbumListContainer />
+				</div>
+			{/*}	<div className="col-xs-10">
 					<Album 
 						album={this.state.album} 
 						currentSong={this.state.currentSong}
 						isPlaying={this.state.isPlaying}
 						toggle={this.toggleOne}
 					/>
-				</div>
+				</div>*/}
 				<Player
 					currentSong={this.state.currentSong}
 					currentSongList={this.state.currentSongList}

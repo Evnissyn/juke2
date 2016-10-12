@@ -1,10 +1,18 @@
 import React from 'react';
 
-import {createStore} from 'redux'
-import reducer from './reduxReducer'
+import {createStore, applyMiddleware} from 'redux';
 
-let store = createStore(reducer);
+import createLogger from 'redux-logger';
+import reduxImport from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
+import {reducer} from './reduxReducer';
+
+console.log('thunkMiddleware', thunkMiddleware);
+
+let newLogger = createLogger();
+let newMiddleware = applyMiddleware(newLogger, thunkMiddleware)
+let store = createStore(reducer, newMiddleware);
 
 
 
