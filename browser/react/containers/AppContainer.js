@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
 import initialState from '../initialState';
 import AUDIO from '../audio';
@@ -10,6 +11,7 @@ import Album from '../components/Album';
 import Player from '../components/Player';
 
 import AlbumListContainer from './AlbumListContainer';
+import {toggle, toggleOne} from '../reduxReducer';
 
 const convertSong = song => {
 	song.audioUrl = `/api/songs/${song.id}/audio`;
@@ -31,14 +33,14 @@ const skip = (interval, { currentSongList, currentSong }) => {
 	return [next, currentSongList];
 };
 
-export default class AppContainer extends Component {
+class AppContainer extends Component {
 
 	constructor (props) {
 		super(props);
 		this.state = initialState;
 		
-		this.toggle = this.toggle.bind(this);
-		this.toggleOne = this.toggleOne.bind(this);
+		// this.toggle = this.toggle.bind(this);
+		// this.toggleOne = this.toggleOne.bind(this);
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
 	}
@@ -58,38 +60,38 @@ export default class AppContainer extends Component {
 		this.setState({ album });
 	}
 
-	play () {
-		AUDIO.play();
-		this.setState({ isPlaying: true });
-	}
+	// play () {
+	// 	AUDIO.play();
+	// 	this.setState({ isPlaying: true });
+	// }
 
-	pause () {
-		AUDIO.pause();
-		this.setState({ isPlaying: false });
-	}
+	// pause () {
+	// 	AUDIO.pause();
+	// 	this.setState({ isPlaying: false });
+	// }
 
-	load (currentSong, currentSongList) {
-		AUDIO.src = currentSong.audioUrl;
-		AUDIO.load();
-		this.setState({ currentSong, currentSongList });
-	}
+	// load (currentSong, currentSongList) {
+	// 	AUDIO.src = currentSong.audioUrl;
+	// 	AUDIO.load();
+	// 	this.setState({ currentSong, currentSongList });
+	// }
 
-	startSong (song, list) {
-		this.pause();
-		this.load(song, list);
-		this.play();
-	}
+	// startSong (song, list) {
+	// 	this.pause();
+	// 	this.load(song, list);
+	// 	this.play();
+	// }
 
-	toggleOne (selectedSong, selectedSongList) {
-		if (selectedSong.id !== this.state.currentSong.id)
-			this.startSong(selectedSong, selectedSongList);
-		else this.toggle();
-	}
+	// toggleOne (selectedSong, selectedSongList) {
+	// 	if (selectedSong.id !== this.state.currentSong.id)
+	// 		this.startSong(selectedSong, selectedSongList);
+	// 	else this.toggle();
+	// }
 
-	toggle () {
-		if (this.state.isPlaying) this.pause();
-		else this.play();
-	}
+	// toggle () {
+	// 	if (this.state.isPlaying) this.pause();
+	// 	else this.play();
+	// }
 
 	next () {
 		this.startSong(...skip(1, this.state));
@@ -117,25 +119,46 @@ export default class AppContainer extends Component {
 				<div className="col-xs-10">
 					<AlbumListContainer />
 				</div>
-			{/*}	<div className="col-xs-10">
+				<div className="col-xs-10">
 					<Album 
 						album={this.state.album} 
-						currentSong={this.state.currentSong}
-						isPlaying={this.state.isPlaying}
-						toggle={this.toggleOne}
+						currentSong={this.props.currentSong}
+						isPlaying={this.props.isPlaying}
+						toggle={this.props.toggleOne}
 					/>
-				</div>*/}
+				</div>
 				<Player
-					currentSong={this.state.currentSong}
-					currentSongList={this.state.currentSongList}
-					isPlaying={this.state.isPlaying}
+					currentSong={this.props.currentSong}
+					currentSongList={this.props.currentSongList}
+					isPlaying={this.props.isPlaying}
 					progress={this.state.progress}
 					next={this.next}
 					prev={this.prev}
-					toggle={this.toggle}
+					toggle={this.props.toggle}
 					scrub={evt => this.seek(evt.nativeEvent.offsetX / evt.target.clientWidth)} 
 				/>
 			</div>
 		);
 	}
 }
+
+// ********** PLAYING *************
+
+const mapStateToProps = (state) => {
+	return {
+		isPlaying: state.isPlaying,
+		currentSong: state.currentSong,
+		currentSongList: state.currentSongList
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		toggleOne: (song, list) => dispatch(toggleOne(song, list)),
+		toggle: () => dispatch(toggle())
+	}
+}
+
+const newAppContainer = connect (mapStateToProps, mapDispatchToProps)(AppContainer);
+
+export default newAppContainer;

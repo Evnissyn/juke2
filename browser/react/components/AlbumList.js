@@ -2,7 +2,9 @@
 
 import React, { Component } from 'react';
 import Songs from '../components/Songs';
+
 import {receiveAlbumListFromServer,fetchAlbumListFromServer} from '../reduxReducer'
+// import {clickAlbum} from '../reduxReducer';
 
 // const {receiveAlbumListFromServer} = reduxObj;
 
@@ -40,7 +42,7 @@ export default class AlbumList extends Component {
 							return (
 							<div className="col-xs-4" key = {album.id}>
 								<a className="thumbnail" href="#">
-									<img src={album.imageUrl} />
+									<img src={album.imageUrl} onClick={() => this.props.clickAlbum(album.id)}/>
 									<div className="caption">
 										<h5>
 											<span>{album.name}</span>

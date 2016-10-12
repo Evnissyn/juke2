@@ -8,7 +8,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import {reducer} from './reduxReducer';
 
-console.log('thunkMiddleware', thunkMiddleware);
+// console.log('thunkMiddleware', thunkMiddleware);
 
 let newLogger = createLogger();
 let newMiddleware = applyMiddleware(newLogger, thunkMiddleware)
